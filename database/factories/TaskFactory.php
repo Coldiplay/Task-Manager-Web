@@ -2,11 +2,13 @@
 
 namespace Database\Factories;
 
-use App\Models\task;
+use App\Models\Project;
+use App\Models\Task;
+use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
- * @extends Factory<task>
+ * @extends Factory<Task>
  */
 class TaskFactory extends Factory
 {
@@ -17,16 +19,21 @@ class TaskFactory extends Factory
      */
     public function definition(): array
     {
+        $userIds = User::all('id')->pluck('id')->toArray();
+        $authorId = $this->faker->randomElement($userIds);
+        unset($userIds[$authorId]);
+
+        $projectIds = Project::all('id')->pluck('id')->toArray();
+
         return [
             'title' => $this->faker->sentence(),
             'description' => $this->faker->paragraph(),
             'status' => $this->faker->randomElement(['new', 'in_progress', 'completed', 'cancelled']),
             'priority' => $this->faker->randomElement(['low', 'medium', 'high', 'critical']),
             'due_date' => now()->addDays($this->faker->numberBetween(1, 30)),
-            'author_id' => $this->faker->randomElement([1, 2, 3, 4, 5, 6, 7, 8, 9, 10]),
-            'assignee_id' => $this->faker->randomElement([1, 2, 3, 4, 5, 6, 7, 8, 9, 10]),
-            'project_id' => $this->faker->randomElement([1, 2, 3, 4, 5, 6, 7, 8, 9, 10]),
-            'created_at' => now(),
+            'author_id' => $authorId,
+            'assignee_id' => $this->faker->randomElement($userIds),
+            'project_id' => $this->faker->randomElement($projectIds),
         ];
     }
 }

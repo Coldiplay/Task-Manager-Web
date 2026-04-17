@@ -2,14 +2,15 @@
 
 namespace Database\Factories;
 
-use App\Models\Project;
+use App\Models\Comment;
+use App\Models\Task;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
- * @extends Factory<Project>
+ * @extends Factory<Comment>
  */
-class ProjectFactory extends Factory
+class CommentFactory extends Factory
 {
     /**
      * Define the model's default state.
@@ -19,10 +20,11 @@ class ProjectFactory extends Factory
     public function definition(): array
     {
         $userIds = User::all('id')->pluck('id')->toArray();
+        $taskIds = Task::all('id')->pluck('id')->toArray();
         return [
-            'name' => $this->faker->sentence(),
-            'description' => $this->faker->paragraph(),
+            'body' => $this->faker->paragraph(),
             'user_id' => $this->faker->randomElement($userIds),
+            'task_id' => $this->faker->randomElement($taskIds),
         ];
     }
 }
