@@ -8,11 +8,6 @@ use App\Models\Task;
 use App\Models\User;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
-<<<<<<< feature/auth-users
-use Illuminate\Support\Facades\Hash;
-=======
-use LaravelSpectrum\Tests\Fixtures\Controllers\Product;
->>>>>>> development
 
 class DatabaseSeeder extends Seeder
 {
@@ -23,27 +18,20 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-<<<<<<< feature/auth-users
-        // User::factory(10)->create();
         User::factory()->create([
             'name' => 'Test User',
             'email' => 'test@example.com',
         ]);
+
         User::factory()->create([
             'name' => 'Admin User',
             'email' => 'admin@example.com',
             'role' => 'admin',
         ]);
-=======
+
         User::factory(10)->create();
         Project::factory(10)->create();
         Task::factory(10)->create();
         Comment::factory(100)->create();
-
-//        User::factory()->create([
-//            'name' => 'Test User',
-//            'email' => 'test@example.com',
-//        ]);
->>>>>>> development
     }
 }
