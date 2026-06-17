@@ -1,5 +1,7 @@
 <?php
 
+use App\Enums\Priority;
+use App\Enums\Status;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
@@ -15,12 +17,12 @@ return new class extends Migration
             $table->id();
             $table->string('title', 255);
             $table->text('description');
-            $table->enum('status', ['new', 'in_progress', 'completed', 'cancelled'])->default('new');
-            $table->enum('priority', ['low', 'medium', 'high', 'critical'])->default('low');
+            $table->enum('status', Status::getValues())->default(Status::NEW);
+            $table->enum('priority', Priority::getValues())->default(Priority::LOW);
             $table->date('due_date');
-            $table->bigInteger('author_id')->unsigned()->references('id')->on('users');
-            $table->bigInteger('assignee_id')->unsigned()->references('id')->on('users');
-            $table->bigInteger('project_id')->unsigned()->references('id')->on('projects');
+            $table->foreignId('project_id')->constrained('projects')->onDelete('cascade');
+            $table->foreignId('author_id')->constrained('users')->onDelete('cascade');
+            $table->foreignId('assignee_id')->nullable()->constrained('users')->onDelete('cascade');
             $table->timestamps();
         });
     }

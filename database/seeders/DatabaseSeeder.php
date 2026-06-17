@@ -2,6 +2,7 @@
 
 namespace Database\Seeders;
 
+use App\Enums\Role;
 use App\Models\Comment;
 use App\Models\Project;
 use App\Models\Task;
@@ -26,7 +27,7 @@ class DatabaseSeeder extends Seeder
         User::factory()->create([
             'name' => 'Admin User',
             'email' => 'admin@example.com',
-            'role' => 'admin',
+            'role' => Role::ADMIN,
         ]);
 
         User::factory(10)->create();

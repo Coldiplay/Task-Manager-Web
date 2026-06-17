@@ -38,10 +38,27 @@ return [
     */
 
     'guards' => [
+        'sanctum' => [
+            'driver' => 'sanctum',
+            'provider' => 'users',
+        ],
         'web' => [
             'driver' => 'session',
             'provider' => 'users',
         ],
+
+        // Guard для Moonshine (сессионная аутентификация)
+        'moonshine' => [
+            'driver' => 'session',
+            'provider' => 'users',   // можно использовать тот же провайдер, что и для web
+        ],
+
+        // Guard для Sanctum (токены)
+        'api' => [
+            'driver' => 'sanctum',
+            'provider' => 'users',   // тот же провайдер, что и у moonshine
+        ],
+
     ],
 
     /*
@@ -66,6 +83,10 @@ return [
             'driver' => 'eloquent',
             'model' => env('AUTH_MODEL', User::class),
         ],
+        'moonshine' => [
+            'driver' => 'eloquent',
+            'model' => User::class,
+        ]
 
         // 'users' => [
         //     'driver' => 'database',
