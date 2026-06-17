@@ -41,7 +41,7 @@ class TaskController extends Controller
             ->byPriority($request->query('priority'))
             ->byAssignee($request->query('assignee_id'))
             ->withSorting($request->query('sort_by'))//, $request->query('sort_order'))
-            ->paginate(10); // get can be used
+            ->paginate(10)->withQueryString() ; // get method can be used instead of paginate
 
         return view('tasks.index', compact('project', 'tasks'));
     }

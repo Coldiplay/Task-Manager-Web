@@ -65,6 +65,16 @@ class TaskPolicy
      */
     public function restore(User $user, Task $task): bool
     {
+        // 1. Admin can do anything
+        if ($user->role === 'admin') {
+            return true;
+        }
+
+        // Manager can do anything in their project
+        if ($user->role === 'manager') {
+            return $user->id === $task->project->author_id;
+        }
+
         return false;
     }
 
@@ -73,6 +83,16 @@ class TaskPolicy
      */
     public function forceDelete(User $user, Task $task): bool
     {
+        // 1. Admin can do anything
+        if ($user->role === 'admin') {
+            return true;
+        }
+
+//        // Manager can do anything in their project
+//        if ($user->role === 'manager') {
+//            return $user->id === $task->project->author_id;
+//        }
+
         return false;
     }
 
