@@ -4,20 +4,20 @@ namespace App\Http\Controllers;
 use App\Http\Requests\CreateTaskRequest;
 use App\Http\Requests\DeleteTaskRequest;
 use App\Http\Requests\UpdateTaskRequest;
-use App\Models\project;
-use App\Models\task;
+use App\Models\Project;
+use App\Models\Task;
 use Illuminate\Http\Request;
 
 class TaskController extends Controller
 {
-    public function show(project $project, task $task)
+    public function show(Project $project, Task $task)
     {
         $this->authorize('view', $task);
         return view('tasks.show', compact('task'));
     }
 
 
-    public function index(Request $request, project $project)
+    public function index(Request $request, Project $project)
     {
         $user = $request->user();
 
@@ -28,7 +28,7 @@ class TaskController extends Controller
         }
 
         if ($user->role === 'executor') {
-            $assignee_task = task::all()->firstWhere(['assignee_id' => $user->id]);
+            $assignee_task = Task::all()->firstWhere(['assignee_id' => $user->id]);
             if ($assignee_task !== null)
             {
                 $query->where('project_id', $assignee_task->project_id);
@@ -55,7 +55,7 @@ class TaskController extends Controller
 //        return task::all()->find(['id' => $id]);
 //    }
 
-    public function store(CreateTaskRequest $request, project $project)
+    public function store(CreateTaskRequest $request, Project $project)
     {
         $validated = $request->validated();
         $task = $project->tasks()->create($validated);
@@ -63,7 +63,7 @@ class TaskController extends Controller
         return redirect()->route('tasks.index', $project)->with('success', 'Задача успешно создана!');
     }
 
-    public function update(UpdateTaskRequest $request, task $task)
+    public function update(UpdateTaskRequest $request, Task $task)
     {
         $validated = $request->validated();
 
@@ -71,7 +71,7 @@ class TaskController extends Controller
         return redirect()->route('task.show', [$task->project_id, $task])->with('success', 'Задача обновлена!');
     }
 
-    public function destroy(DeleteTaskRequest $request, task $task)
+    public function destroy(DeleteTaskRequest $request, Task $task)
     {
         $project = $task->project;
 

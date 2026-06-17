@@ -2,9 +2,9 @@
 
 namespace App\Policies;
 
-use App\Models\project;
+use App\Models\Project;
 use App\Models\User;
-use App\Models\task;
+use App\Models\Task;
 use Illuminate\Auth\Access\Response;
 
 class TaskPolicy
@@ -26,7 +26,7 @@ class TaskPolicy
     /**
      * Determine whether the user can view the model.
      */
-    public function view(User $user, task $task): bool
+    public function view(User $user, Task $task): bool
     {
 
         // 1. Admin can do anything
@@ -59,7 +59,7 @@ class TaskPolicy
 
         // Manager can do anything in their project
         if ($user->role === 'manager') {
-            return $user->id === project::all()->find(['id' => $project_id])->user_id;
+            return $user->id === Project::all()->find(['id' => $project_id])->user_id;
         }
 
         return false;
@@ -68,7 +68,7 @@ class TaskPolicy
     /**
      * Determine whether the user can update the model.
      */
-    public function update(User $user, task $task): bool
+    public function update(User $user, Task $task): bool
     {
         // 1. Admin can do anything
         if ($user->role === 'admin') {
@@ -91,7 +91,7 @@ class TaskPolicy
     /**
      * Determine whether the user can delete the model.
      */
-    public function delete(User $user, task $task): bool
+    public function delete(User $user, Task $task): bool
     {
         // 1. Admin can do anything
         if ($user->role === 'admin') {
@@ -109,7 +109,7 @@ class TaskPolicy
     /**
      * Determine whether the user can restore the model.
      */
-    public function restore(User $user, task $task): bool
+    public function restore(User $user, Task $task): bool
     {
         // 1. Admin can do anything
         if ($user->role === 'admin') {
@@ -127,7 +127,7 @@ class TaskPolicy
     /**
      * Determine whether the user can permanently delete the model.
      */
-    public function forceDelete(User $user, task $task): bool
+    public function forceDelete(User $user, Task $task): bool
     {
         // 1. Admin can do anything
         if ($user->role === 'admin') {
