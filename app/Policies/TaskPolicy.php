@@ -34,7 +34,11 @@ class TaskPolicy
      */
     public function create(User $user): Response
     {
-        return Response::allow();
+        if ($user->role === Role::ADMIN
+            || $user->role == Role::MANAGER) {
+            return Response::allow();
+        }
+        return Response::denyWithStatus(403, 'You are not allowed to create tasks');
     }
 
     /**

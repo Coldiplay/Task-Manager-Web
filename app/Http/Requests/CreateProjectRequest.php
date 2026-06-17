@@ -2,7 +2,7 @@
 
 namespace App\Http\Requests;
 
-use App\Models\project;
+use App\Models\Project;
 use Illuminate\Contracts\Validation\ValidationRule;
 use Illuminate\Foundation\Http\FormRequest;
 
@@ -13,7 +13,7 @@ class CreateProjectRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        return $this->user()->can('create', project::class);
+        return $this->user()->can('create', Project::class);
     }
 
     /**

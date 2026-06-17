@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\CreateProjectRequest;
 use App\Http\Requests\UpdateProjectRequest;
-use App\Models\project;
+use App\Models\Project;
 use Illuminate\Http\Request;
 
 class ProjectController extends Controller
@@ -14,7 +14,7 @@ class ProjectController extends Controller
         $user = $request->user();
 
         if ($user->role === 'admin') {
-            $projects = project::latest()->paginate(10);
+            $projects = Project::latest()->paginate(10);
         } elseif ($user->role === 'manager') {
             $projects = Project::where('manager_id', $user->id)->latest()->paginate(10);
         } else {
