@@ -7,9 +7,12 @@
     "license": "MIT",
     "require": {
         "php": "^8.2",
+        "bensampo/laravel-enum": "^6.14",
         "laravel/framework": "^12.0",
         "laravel/sanctum": "^4.3",
         "laravel/tinker": "^2.10.1",
+        "moonshine/moonshine": "^4.11",
+        "moonshine/ru": "^1.0",
         "wadakatu/laravel-spectrum": "^1.1"
     },
     "require-dev": {

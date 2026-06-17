@@ -49,6 +49,10 @@ class LoginRequest extends FormRequest
                 'email' => trans('auth.failed'),
             ]);
         }
+        if (Auth::user()->is_blocked)
+        {
+            throw ValidationException::withMessages([]);
+        }
 
         RateLimiter::clear($this->throttleKey());
     }

@@ -25,6 +25,8 @@ class User extends Authenticatable
         'name',
         'email',
         'password',
+        'is_blocked',
+        'role'
     ];
 
     /**
@@ -52,7 +54,7 @@ class User extends Authenticatable
 
     public function authoredTasks() : HasMany
     {
-        return $this->hasMany(Task::class, 'user_id');
+        return $this->hasMany(Task::class, 'author_id');
     }
     public function comments(): HasMany
     {
