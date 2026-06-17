@@ -6,6 +6,8 @@ use App\Http\Requests\DeleteTaskRequest;
 use App\Http\Requests\UpdateTaskRequest;
 use App\Models\Project;
 use App\Models\Task;
+use App\Models\User;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
 
 class TaskController extends Controller
@@ -21,7 +23,8 @@ class TaskController extends Controller
     {
         $user = $request->user();
 
-        $query = $project->tasks();
+        $all_tasks = $project->tasks()->get();
+        $query = $project->tasks()->getQuery();
 
         if ($user->role === 'manager' && $project->author_id !== $user->id) {
             abort(403, 'Вы не менеджер этого проекта');
@@ -35,15 +38,31 @@ class TaskController extends Controller
             }
         }
 
+        //sort fields for security
+        $allowedSortFields = ['created_at', 'priority', 'due_date'];
+        $sortBy = in_array($request->query('sort_by'), $allowedSortFields) ? $request->query('sort_by') : 'created_at';
+        $sortOrder = strtolower($request->query('sort_order')) === 'desc' ? 'desc' : 'asc';
         // filters from url
         // Filter and sort by url parameters
-        $tasks = $query->byStatus($request->query('status'))
-            ->byPriority($request->query('priority'))
-            ->byAssignee($request->query('assignee_id'))
-            ->withSorting($request->query('sort_by'))//, $request->query('sort_order'))
-            ->paginate(10)->withQueryString() ; // get method can be used instead of paginate
-
-        return view('tasks.index', compact('project', 'tasks'));
+        $tasks = $query
+            ->when($user->role === 'executor', function ($query) use ($user) {
+                $query->where('assignee_id', $user->id);
+            }) //comment for debug, uncomment it in prod
+            ->when($request->query('status'), function ($query, $status) {
+                $query->where('status', $status);
+            })
+            ->when($request->query('priority'), function ($query, $priority) {
+                $query->where('priority', $priority);
+            })
+            ->when($request->query('assignee_id'), function ($query, $assigneeId) {
+                $query->where('assignee_id', $assigneeId);
+            })
+            ->orderBy($sortBy, $sortOrder)
+            ->paginate(10)
+            ->withQueryString();
+        // get method can be used instead of paginate
+        $users = User::all();
+        return view('index', compact('project', 'tasks', 'all_tasks', 'users'));
     }
 
 //    public function GetTasks()
@@ -60,7 +79,7 @@ class TaskController extends Controller
         $validated = $request->validated();
         $task = $project->tasks()->create($validated);
 
-        return redirect()->route('tasks.index', $project)->with('success', 'Задача успешно создана!');
+        return redirect()->route('index', $project)->with('success', 'Задача успешно создана!');
     }
 
     public function update(UpdateTaskRequest $request, Task $task)
@@ -68,7 +87,7 @@ class TaskController extends Controller
         $validated = $request->validated();
 
         $task->update($validated);
-        return redirect()->route('task.show', [$task->project_id, $task])->with('success', 'Задача обновлена!');
+        return redirect()->route('task', [$task->project_id, $task])->with('success', 'Задача обновлена!');
     }
 
     public function destroy(DeleteTaskRequest $request, Task $task)
@@ -76,7 +95,51 @@ class TaskController extends Controller
         $project = $task->project;
 
         $task->delete();
-        return redirect()->route('tasks.index', $project)->with('success', 'Задача удалена.');
+        return redirect()->route('index', $project)->with('success', 'Задача удалена.');
+    }
+
+
+
+    //Filters:
+    //status filter
+    public function byStatus(Builder $query, ?string $status): Builder
+    {
+        // Invoke when() only if $status is not empty
+        return $query->when($status, function ($q) use ($status) {
+            return $q->where('status', $status);
+        });
+    }
+
+    //priority filter
+    public function byPriority(Builder $query, ?string $priority): Builder
+    {
+        return $query->when($priority, function ($q) use ($priority) {
+            return $q->where('priority', $priority);
+        });
+    }
+
+    //assignee filter
+    public function byAssignee(Builder $query, ?int $assigneeId): Builder
+    {
+        return $query->when($assigneeId, function ($q) use ($assigneeId) {
+            return $q->where('assignee_id', $assigneeId);
+        });
+    }
+
+    //sort
+    public function withSorting(Builder $query, ?string $sortBy, ?string $direction = 'asc'): Builder
+    {
+        $allowedSortFields = ['created_at', 'priority', 'due_date'];
+
+        //direction of sort
+        $direction = strtolower($direction) === 'desc' ? 'desc' : 'asc';
+
+        return $query->when(in_array($sortBy, $allowedSortFields), function ($q) use ($sortBy, $direction) {
+            return $q->orderBy($sortBy, $direction);
+        }, function ($q) {
+            // If its get nothing, then sort by default
+            return $q->orderBy('created_at', 'desc');
+        });
     }
 
 }
