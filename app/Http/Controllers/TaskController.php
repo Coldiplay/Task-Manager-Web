@@ -15,6 +15,37 @@ class TaskController extends Controller
         $this->authorize('view', $task);
         return view('tasks.show', compact('task'));
     }
+
+
+    public function index(Request $request, project $project)
+    {
+        $user = $request->user();
+
+        $query = $project->tasks();
+
+        if ($user->role === 'manager' && $project->author_id !== $user->id) {
+            abort(403, 'Вы не менеджер этого проекта');
+        }
+
+        if ($user->role === 'executor') {
+            $assignee_task = task::all()->firstWhere(['assignee_id' => $user->id]);
+            if ($assignee_task !== null)
+            {
+                $query->where('project_id', $assignee_task->project_id);
+            }
+        }
+
+        // filters from url
+        // Filter and sort by url parameters
+        $tasks = $query->byStatus($request->query('status'))
+            ->byPriority($request->query('priority'))
+            ->byAssignee($request->query('assignee_id'))
+            ->withSorting($request->query('sort_by'))//, $request->query('sort_order'))
+            ->paginate(10); // get can be used
+
+        return view('tasks.index', compact('project', 'tasks'));
+    }
+
 //    public function GetTasks()
 //    {
 //        return task::all();
