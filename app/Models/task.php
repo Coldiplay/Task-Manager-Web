@@ -51,7 +51,11 @@ class task extends Model
         });
     }
 
-
+    public function comments()
+    {
+        // task may have many comments
+        return $this->hasMany(Comment::class)->latest(); // latest() sort from new to old
+    }
 }
 
 //public function __construct(string $title, string $description, string $status, string $priority, ) : task
