@@ -60,7 +60,7 @@ class TaskController extends Controller
         $validated = $request->validated();
         $task = $project->tasks()->create($validated);
 
-        return response()->json($task, 201);
+        return redirect()->route('tasks.index', $project)->with('success', 'Задача успешно создана!');
     }
 
     public function update(UpdateTaskRequest $request, task $task)
@@ -68,13 +68,15 @@ class TaskController extends Controller
         $validated = $request->validated();
 
         $task->update($validated);
-        return response()->json(['message' => 'Task updated successfully.', 'task' => $task]);
+        return redirect()->route('task.show', [$task->project_id, $task])->with('success', 'Задача обновлена!');
     }
 
     public function destroy(DeleteTaskRequest $request, task $task)
     {
+        $project = $task->project;
+
         $task->delete();
-        return response()->json(['message' => 'Task deleted successfully.']);
+        return redirect()->route('tasks.index', $project)->with('success', 'Задача удалена.');
     }
 
 }
