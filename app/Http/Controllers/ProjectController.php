@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Requests\CreateProjectRequest;
 use App\Http\Requests\UpdateProjectRequest;
 use App\Models\Project;
+use App\Models\User;
 use Illuminate\Http\Request;
 
 class ProjectController extends Controller
@@ -13,6 +14,8 @@ class ProjectController extends Controller
     {
         $user = $request->user();
 
+        //if($user->role === null)
+        $projects = Project::all();//latest->sortBy()->paginate(10);
         if ($user->role === 'admin') {
             $projects = Project::latest()->paginate(10);
         } elseif ($user->role === 'manager') {
@@ -22,8 +25,8 @@ class ProjectController extends Controller
                 $query->where('assignee_id', $user->id);
             })->latest()->paginate(10);
         }
-
-        return view('projects.index', compact('projects'));
+        $users = User::all();
+        return view('projects', compact('projects', 'users'));
     }
 
     public function create()

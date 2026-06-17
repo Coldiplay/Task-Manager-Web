@@ -25,8 +25,8 @@ class TaskFactory extends Factory
             'due_date' => now()->addDays($this->faker->numberBetween(1, 30)),
             'author_id' => $this->faker->randomElement([1, 2, 3, 4, 5, 6, 7, 8, 9, 10]),
             'assignee_id' => $this->faker->randomElement([1, 2, 3, 4, 5, 6, 7, 8, 9, 10]),
-            'project_id' => $this->faker->randomElement([1, 2, 3, 4, 5, 6, 7, 8, 9, 10]),
-            'created_at' => now(),
+            'project_id' => $this->faker->numberBetween(1, 20),
+            //'created_at' => now(),
         ];
     }
 }

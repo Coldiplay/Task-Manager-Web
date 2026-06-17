@@ -18,7 +18,7 @@ return new class extends Migration
             $table->enum('status', ['new', 'in_progress', 'completed', 'cancelled'])->default('new');
             $table->enum('priority', ['low', 'medium', 'high', 'critical'])->default('low');
             $table->date('due_date');
-            $table->foreignId('author_id')->unsigned()->constrained();//->on('users');
+            $table->foreignId('author_id')->unsigned()->constrained('users');//->on('users');
             $table->foreignId('assignee_id')->unsigned()->constrained('users');//->on('users');
             $table->foreignId('project_id')->unsigned()->constrained();//->on('projects');
             $table->timestamps();
