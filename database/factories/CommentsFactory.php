@@ -2,11 +2,11 @@
 
 namespace Database\Factories;
 
-use App\Models\comments;
+use App\Models\comment;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
- * @extends Factory<comments>
+ * @extends Factory<comment>
  */
 class CommentsFactory extends Factory
 {

@@ -2,13 +2,13 @@
 
 namespace Database\Seeders;
 
-use App\Models\comments;
+use App\Models\comment;
 use App\Models\project;
 use App\Models\task;
 use App\Models\User;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
-use LaravelSpectrum\Tests\Fixtures\Controllers\Product;
+//use LaravelSpectrum\Tests\Fixtures\Controllers\Product;
 
 class DatabaseSeeder extends Seeder
 {
@@ -22,7 +22,7 @@ class DatabaseSeeder extends Seeder
         User::factory(10)->create();
         project::factory(10)->create();
         task::factory(10)->create();
-        comments::factory(100)->create();
+        comment::factory(100)->create();
 
 //        User::factory()->create([
 //            'name' => 'Test User',
