@@ -1,4 +1,4 @@
-@extends('proj2.app')
+@extends('app')
 
 @section('title', 'Панель администратора')
 
@@ -100,7 +100,8 @@
                             @else
                             <div class="fw-bold text-muted text-decoration-line-through">
                             @endif
-                            {{ $user->name }}</div>
+                            {{ $user->name }}
+                            </div>
                         </div>
                     </td>
                     <td><span class="text-muted small">{{ $user->email }}</span></td>

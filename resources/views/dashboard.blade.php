@@ -1,4 +1,4 @@
-@extends('proj2.app')
+@extends('app')
 
 @section('title', 'Личный дашборд')
 
@@ -20,7 +20,7 @@
                 <div class="d-flex align-items-center justify-content-between">
                     <div>
                         <div class="text-muted small text-uppercase fw-bold">Назначены мне</div>
-                        <div class="h3 my-1 text-primary">14</div>
+                        <div class="h3 my-1 text-primary">{{Auth::user()->assignedTasks()->count()}}</div>
                     </div>
                     <div class="h2 text-muted opacity-50"><i class="bi bi-person-check"></i></div>
                 </div>
@@ -31,7 +31,7 @@
                 <div class="d-flex align-items-center justify-content-between">
                     <div>
                         <div class="text-muted small text-uppercase fw-bold">Созданы мной</div>
-                        <div class="h3 my-1 text-info">6</div>
+                        <div class="h3 my-1 text-info">{{Auth::user()->authoredTasks()->count()}}</div>
                     </div>
                     <div class="h2 text-muted opacity-50"><i class="bi bi-person-plus"></i></div>
                 </div>
@@ -42,7 +42,7 @@
                 <div class="d-flex align-items-center justify-content-between">
                     <div>
                         <div class="text-danger small text-uppercase fw-bold">Просроченные задачи</div>
-                        <div class="h3 my-1 text-danger fw-bold">2</div>
+                        <div class="h3 my-1 text-danger fw-bold">2 {{--хз--}}</div>
                     </div>
                     <div class="h2 text-danger opacity-50"><i class="bi bi-exclamation-octagon"></i></div>
                 </div>
@@ -79,6 +79,9 @@
                             </tr>
                             </thead>
                             <tbody>
+                            @foreach(Auth::user()->assignedTasks as $myTask)
+                                <tr @if($myTask->status) @endif></tr>
+                            @endforeach
                             <!-- Пример критической просроченной задачи -->
                             <tr class="table-danger-subtle">
                                 <td class="ps-3">

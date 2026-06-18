@@ -15,7 +15,7 @@ class TaskController extends Controller
     public function show(Project $project, Task $task)
     {
         $this->authorize('view', $task);
-        return view('tasks.show', compact('task'));
+        return view('task.show', compact('task'));
     }
 
 
@@ -79,7 +79,8 @@ class TaskController extends Controller
         $validated = $request->validated();
         $task = $project->tasks()->create($validated);
 
-        return redirect()->route('index', $project)->with('success', 'Задача успешно создана!');
+        return redirect()->route('task.index', $project)
+            ->with('success', 'Задача успешно создана!');
     }
 
     public function update(UpdateTaskRequest $request, Task $task)
@@ -87,7 +88,8 @@ class TaskController extends Controller
         $validated = $request->validated();
 
         $task->update($validated);
-        return redirect()->route('task', [$task->project_id, $task])->with('success', 'Задача обновлена!');
+        return redirect()->route('task.show', [$task->project_id, $task])
+            ->with('success', 'Задача обновлена!');
     }
 
     public function destroy(DeleteTaskRequest $request, Task $task)
@@ -95,7 +97,8 @@ class TaskController extends Controller
         $project = $task->project;
 
         $task->delete();
-        return redirect()->route('index', $project)->with('success', 'Задача удалена.');
+        return redirect()->route('task.index', $project)
+            ->with('success', 'Задача удалена.');
     }
 
 
