@@ -53,7 +53,7 @@
             <!-- Профиль пользователя -->
             <div class="dropdown text-end">
                 <a href="#" class="d-block link-light text-decoration-none dropdown-toggle" data-bs-toggle="dropdown">
-                    <img src="https://unsplash.com" alt="mdo" width="32" height="32" class="rounded-circle me-1">
+{{--                    <img src="https://unsplash.com" alt="mdo" width="32" height="32" class="rounded-circle me-1">--}}
                     {{ Auth::user()->name ?? 'Иван Иванов' }}
                 </a>
                 <ul class="dropdown-menu dropdown-menu-end text-small">

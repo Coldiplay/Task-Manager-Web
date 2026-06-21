@@ -56,7 +56,7 @@
                 <button type="submit" class="btn btn-sm btn-secondary me-2">Применить</button>
 
 
-                <a href="#clearfilters" class="btn btn-sm btn-link text-decoration-none">Сбросить</a>
+                <a href="?" class="btn btn-sm btn-link text-decoration-none">Сбросить</a>
             </div>
         </form>
     </div>

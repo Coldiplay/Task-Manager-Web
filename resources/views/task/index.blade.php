@@ -67,7 +67,7 @@
                         <small class="text-muted">Автор: {{ $task->author->name }}</small>
                     </td>
                     <td><span class="badge bg-info text-dark">{{ $task->status }}</span></td>
-                    <td><span class="badge bg-danger">{{ $task->priority }}</span></td>
+                    <td><span class="badge" style="color: hsl({{120 - (120/(count($priorities)-1)) * array_search($task->priority, $priorities)}}, 80%, 50%)">{{ $task->priority }}</span></td>
                     <td> {{ $task->assignee->name }}</td>
                     <td><span class="text-danger fw-semibold">{{ $task->due_date }}</span></td>
                     <td class="text-end">

@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Http\Controllers;
+use App\Enums\Priority;
 use App\Http\Requests\CreateTaskRequest;
 use App\Http\Requests\DeleteTaskRequest;
 use App\Http\Requests\UpdateTaskRequest;
@@ -44,25 +45,39 @@ class TaskController extends Controller
         $sortOrder = strtolower($request->query('sort_order')) === 'desc' ? 'desc' : 'asc';
         // filters from url
         // Filter and sort by url parameters
+//        $tasks = $query
+//            ->when($user->role === 'executor', function ($query) use ($user) {
+//                $query->where('assignee_id', $user->id);
+//            }) //comment for debug, uncomment it in prod
+//            ->when($request->query('status'), function ($query, $status) {
+//                $query->where('status', $status);
+//            })
+//            ->when($request->query('priority'), function ($query, $priority) {
+//                $query->where('priority', $priority);
+//            })
+//            ->when($request->query('assignee_id'), function ($query, $assigneeId) {
+//                $query->where('assignee_id', $assigneeId);
+//            })
+//            ->orderBy($sortBy, $sortOrder)
+//            ->paginate(10)
+//            ->withQueryString();
         $tasks = $query
-            ->when($user->role === 'executor', function ($query) use ($user) {
-                $query->where('assignee_id', $user->id);
-            }) //comment for debug, uncomment it in prod
+            ->when($request->query('assignee'), function ($query, $assigneeId) {
+                    $query->where('assignee_id', $assigneeId);
+            })
             ->when($request->query('status'), function ($query, $status) {
                 $query->where('status', $status);
             })
             ->when($request->query('priority'), function ($query, $priority) {
                 $query->where('priority', $priority);
             })
-            ->when($request->query('assignee_id'), function ($query, $assigneeId) {
-                $query->where('assignee_id', $assigneeId);
-            })
             ->orderBy($sortBy, $sortOrder)
             ->paginate(10)
             ->withQueryString();
         // get method can be used instead of paginate
         $users = User::all();
-        return view('index', compact('project', 'tasks', 'all_tasks', 'users'));
+        $priorities = Priority::getValues();
+        return view('task.index', compact('project', 'tasks', 'all_tasks', 'users', 'priorities'));
     }
 
 //    public function GetTasks()

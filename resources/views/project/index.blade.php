@@ -77,7 +77,7 @@
                         </div>
                     </div>
                     <div class="card-footer bg-white border-0 pt-0 pb-3 px-3">
-                        <a href="{{route('index', $project)}}" class="btn btn-sm btn-outline-primary w-100">Открыть
+                        <a href="{{route('task.index', $project)}}" class="btn btn-sm btn-outline-primary w-100">Открыть
                             задачи проекта</a>
                     </div>
                 </div>
