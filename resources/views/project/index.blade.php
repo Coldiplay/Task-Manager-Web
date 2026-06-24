@@ -30,7 +30,7 @@
                                         <button class="dropdown-item small" data-bs-toggle="modal"
                                                 data-bs-target="#editProjectModal" data-id="1"
                                                 data-name="Ребрендинг сайта" data-desc="Обновление дизайна и фронтенда">
-                                            <i class="bi bi-pencil me-2 text-muted"></i>Редактировать
+                                            <p class="bi bi-pencil me-2 text-muted"></p>Редактировать
                                         </button>
                                     </li>
                                     <li>

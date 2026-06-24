@@ -43,7 +43,7 @@ Route::middleware('auth')->group(function () {
 
 
                 Route::group(['prefix' => '{task}'], function () {
-                    Route::get('/}',[TaskController::class,'show'])
+                    Route::get('/',[TaskController::class,'show'])
                         ->name('task.show');
 
                     Route::put('/', [TaskController::class, 'update'])

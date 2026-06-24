@@ -1,11 +1,10 @@
-```html
 @extends('app')
 
 @section('title', 'Просмотр задачи')
 
 @section('content')
     <div class="mb-3">
-        <a href="#" class="btn btn-sm btn-link text-decoration-none ps-0"><i class="bi bi-arrow-left me-1"></i> Назад к списку</a>
+        <a href="{{route('task.index', $task->project)}}" class="btn btn-sm btn-link text-decoration-none ps-0"><i class="bi bi-arrow-left me-1"></i> Назад к списку</a>
     </div>
 
     <div class="row g-4">
@@ -28,28 +27,32 @@
             <!-- Форма добавления -->
             <div class="card border-0 shadow-sm mb-3">
                 <div class="card-body">
-                    <form action="#" method="POST">
+                    <form action="{{route('comment.store', $task)}}" method="POST">
                         @csrf
+                        @method('POST')
                         <div class="mb-3">
-                            <textarea name="comment" class="form-control" rows="2" placeholder="Напишите комментарий..." required></textarea>
+                            <textarea name="body" class="form-control" rows="2" placeholder="Напишите комментарий..." required></textarea>
                         </div>
                         <button type="submit" class="btn btn-sm btn-primary">Отправить</button>
                     </form>
                 </div>
             </div>
 
+            @foreach($task->comments as $comment)
+
             <!-- Лента комментариев -->
             <div class="d-flex flex-column gap-3">
                 <div class="card border-0 shadow-sm">
                     <div class="card-body">
                         <div class="d-flex justify-content-between align-items-center mb-2">
-                            <span class="fw-bold small">Ольга Сидорова</span>
-                            <span class="text-muted small">17.06.2026 10:15</span>
+                            <span class="fw-bold small">{{$comment->user->name}}</span>
+                            <span class="text-muted small">{{$comment->created_at}}</span>
                         </div>
-                        <p class="card-text small mb-0">Спецификацию по JWT прикрепила в техническое задание. Проверьте, пожалуйста.</p>
+                        <p class="card-text small mb-0">{{$comment->body}}</p>
                     </div>
                 </div>
             </div>
+            @endforeach
         </div>
 
         <!-- Правая колонка: Метаданные -->

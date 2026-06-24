@@ -19,8 +19,9 @@ class CommentsController extends Controller
 
     public function store(CreateCommentRequest $request, Task $task)
     {
+        //dd([$request, $task]);
         $task->comments()->create([
-            'content' => $request->validated()['content'],
+            'body' => $request->validated()['body'],
             'user_id' => $request->user()->id,
         ]);
 

@@ -71,17 +71,22 @@
                     <td> {{ $task->assignee->name }}</td>
                     <td><span class="text-danger fw-semibold">{{ $task->due_date }}</span></td>
                     <td class="text-end">
-                        <div class="btn-group">
-                            <a href="comments" class="btn btn-sm btn-outline-secondary" title="Просмотр и комментарии">
+                        <div class="btn-group" role="group" aria-label="Действия над задачей">
+                            <!-- Просмотр -->
+                            <a href="{{ route('task.show', [$task->project, $task]) }}" class="btn btn-outline-secondary d-inline-flex align-items-center" title="Просмотр и комментарии">
                                 <i class="bi bi-eye"></i>
                             </a>
-                            <button class="btn btn-sm btn-outline-secondary" data-bs-toggle="modal" data-bs-target="#editTaskModal" title="Редактировать">
+
+                            <!-- Редактировать -->
+                            <button type="button" class="btn btn-outline-secondary d-inline-flex align-items-center" data-bs-toggle="modal" data-bs-target="#editTaskModal" title="Редактировать">
                                 <i class="bi bi-pencil"></i>
                             </button>
+
+                            <!-- Удалить -->
                             <form action="#delete" method="POST" class="d-inline" onsubmit="return confirm('Удалить задачу?')">
                                 @csrf
                                 @method('DELETE')
-                                <button type="submit" class="btn btn-sm btn-outline-danger" title="Удалить">
+                                <button type="submit" class="btn btn-outline-danger d-inline-flex align-items-center h-100" style="border-top-left-radius: 0; border-bottom-left-radius: 0;" title="Удалить">
                                     <i class="bi bi-trash"></i>
                                 </button>
                             </form>
